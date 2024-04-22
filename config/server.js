@@ -4,6 +4,8 @@ import swaggerUI from 'swagger-ui-express';
 import processSwaggerDocuments from "./swagger.js";
 import UserController from "../app/controllers/UserController.js";
 import ProductController from "../app/controllers/ProductController.js";
+import CategoryController from "../app/controllers/CategoryController.js";
+import MapController from "../app/controllers/MapController.js";
 
 dotenv.config();
 
@@ -35,6 +37,19 @@ const startServer = async () => {
     app.put('/products', ProductController.updateProduct);
     app.delete('/products', ProductController.deleteProduct);
     app.post('/products/search', ProductController.searchProduct);
+
+    app.post('/category', CategoryController.createCategory);
+    app.get('/category/:id', CategoryController.getCategoryById);
+    app.get('/category', CategoryController.getAllCategories);
+    app.put('/category', CategoryController.updateCategory);
+    app.delete('/category', CategoryController.deleteCategory);
+    app.post('/category/search', CategoryController.searchCategory);
+
+    app.post('/map', MapController.createMap);
+    app.get('/map/:id', MapController.getStoreMapById);
+    app.get('/map', MapController.getAllStoreMaps);
+    app.put('/map', MapController.updateStoreMap);
+    app.delete('/map', MapController.deleteProduct);
 
     app.use('/', (req, res) => {
         console.log('helloworld');
