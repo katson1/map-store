@@ -1,0 +1,17 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "EasyAccont",
+        "description": "Documentation from EasyAccount api",
+        "version": "1.0.0"
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
