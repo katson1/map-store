@@ -52,7 +52,6 @@ const startServer = async () => {
     app.delete('/map', MapController.deleteProduct);
 
     app.use('/', (req, res) => {
-        console.log('helloworld');
         res.send('Hello, world!');
     });
 
