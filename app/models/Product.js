@@ -3,7 +3,7 @@ import pool from '../../config/db.js';  // Assuming your database connection set
 class Product {
 
     static async createProduct(nome, descricao, categoria_id, latitude, longitude) {
-        const query = 'INSERT INTO products (nome, descricao, categoria_id, latitude, longitude) VALUES ($1, $2, $3, $4, $5) RETURNING *;';
+        const query = 'INSERT INTO produtos (nome, descricao, categoria_id, latitude, longitude) VALUES ($1, $2, $3, $4, $5) RETURNING *;';
         const values = [nome, descricao, categoria_id, latitude, longitude];
         try {
             const res = await pool.query(query, values);
@@ -15,7 +15,7 @@ class Product {
     }
 
     static async getProductById(id) {
-        const query = `SELECT * FROM products WHERE id = $1;`;
+        const query = `SELECT * FROM produtos WHERE id = $1;`;
         try {
             const { rows } = await pool.query(query, [id]);
             return rows[0];
@@ -26,8 +26,9 @@ class Product {
     }
     
     static async getAllProducts() {
-        const query = `SELECT * FROM products;`;
-        try {
+        const query = `SELECT p.id, p.nome, p.descricao, p.categoria_id, c.nome as nome_categoria, c.descricao as descricao_categoria, p.latitude, p.longitude
+                        FROM public.produtos as p inner join categories as c on p.categoria_id = c.id;`;
+        try {   
             const { rows } = await pool.query(query);
             return rows;
         } catch (err) {
@@ -37,7 +38,7 @@ class Product {
     }
 
     static async updateProduct(id, nome, descricao, categoria_id, latitude, longitude) {
-        const query = `UPDATE products
+        const query = `UPDATE produtos
                        SET nome = $1, descricao = $2, categoria_id = $3, latitude = $4, longitude = $5
                        WHERE id = $6
                        RETURNING *;`;
@@ -52,7 +53,7 @@ class Product {
     }
     
     static async deleteProduct(id) {
-        const query = `DELETE FROM products WHERE id = $1;`;
+        const query = `DELETE FROM produtos WHERE id = $1;`;
         try {
             await pool.query(query, [id]);
             return { message: "Product deleted successfully." };
@@ -65,7 +66,7 @@ class Product {
     static async searchProducts(searchString) {
         const query = `
             SELECT p.id, p.nome, p.descricao, p.categoria_id, p.latitude, p.longitude, c.nome as categoria_nome
-            FROM products p
+            FROM produtos p
             INNER JOIN categories c ON p.categoria_id = c.id
             WHERE p.nome ILIKE $1 OR p.descricao ILIKE $1 OR c.nome ILIKE $1;
         `;
